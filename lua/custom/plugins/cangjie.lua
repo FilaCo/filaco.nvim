@@ -1,0 +1,1 @@
+vim.pack.add({ 'https://github.com/ide4cj/cangjie.nvim' })
