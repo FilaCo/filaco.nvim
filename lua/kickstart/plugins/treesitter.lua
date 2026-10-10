@@ -9,7 +9,28 @@ local function gh(repo) return 'https://github.com/' .. repo end
 vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
 -- Ensure basic parsers are installed
-local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+local parsers = {
+  'bash',
+  'c',
+  'diff',
+  'fish',
+  'git_config',
+  'git_rebase',
+  'gitcommit',
+  'html',
+  'json',
+  'lua',
+  'luadoc',
+  'markdown',
+  'markdown_inline',
+  'query',
+  'regex',
+  'rust',
+  'toml',
+  'vim',
+  'vimdoc',
+  'yaml',
+}
 require('nvim-treesitter').install(parsers)
 
 ---@param buf integer
@@ -20,10 +41,10 @@ local function treesitter_try_attach(buf, language)
   -- Enable syntax highlighting and other treesitter features
   vim.treesitter.start(buf, language)
 
-  -- Enable treesitter based folds
+  -- Enable treesitter based folds (all open by default, see 'foldlevelstart' in `options.lua`)
   -- For more info on folds see `:help folds`
-  -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-  -- vim.wo.foldmethod = 'expr'
+  vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+  vim.wo.foldmethod = 'expr'
 
   -- Check if treesitter indentation is available for this language, and if so enable it
   -- in case there is no indent query, the indentexpr will fallback to the vim's built in one

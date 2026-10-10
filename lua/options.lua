@@ -88,4 +88,15 @@ vim.o.confirm = true
 -- See `:help 'winborder'`
 vim.o.winborder = 'rounded'
 
+-- [[ Folds ]]
+-- Where folds come from is decided per buffer: treesitter in `kickstart/plugins/treesitter.lua`,
+-- the language server for Cangjie (cangjie.nvim switches `foldexpr` once cjls attaches).
+-- Start with every fold open: folding is a tool to reach for with `zc`/`zo`/`za`,
+-- not something that hides code when a file is opened.
+-- See `:help fold-commands`
+vim.o.foldlevelstart = 99
+-- Empty 'foldtext' shows the folded line with its normal syntax highlighting
+-- instead of the plain "+--  12 lines: ..." text.
+vim.o.foldtext = ''
+
 -- vim: ts=2 sts=2 sw=2 et
