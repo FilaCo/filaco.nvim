@@ -1,0 +1,11 @@
+{
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "This repository is the user's own Neovim config, checked out at ~/.config/nvim; the live editor loads it directly, so an edit here takes effect on the next nvim start.",
+      "The git remote github.com/FilaCo/filaco.nvim is the user's own repository; pushing branches to it and opening PRs there is routine when the user asks for it.",
+      "Plugins are installed by vim.pack into ~/.local/share/nvim/site/pack/core/opt and tools by Mason into ~/.local/share/nvim/mason; both are caches that nvim recreates, and reading them to check a plugin's behaviour is expected.",
+      "Running nvim --headless with this config, stylua and lua-language-server from Mason are the routine checks for this repo."
+    ]
+  }
+}

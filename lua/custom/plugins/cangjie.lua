@@ -1,1 +1,12 @@
-vim.pack.add({ 'https://github.com/ide4cj/cangjie.nvim' })
+-- Cangjie: the cjls language server (which also formats and folds) and the tree-sitter grammar.
+-- https://github.com/ide4cj/cangjie.nvim
+--
+-- The plugin needs no setup(): its `plugin/` files run after init.lua and
+--   - enable the `cjls` server for `.cj` buffers (the one on PATH wins over the download),
+--   - register the cangjie grammar so `kickstart.plugins.treesitter` installs it on the
+--     first `.cj` buffer,
+--   - switch `foldexpr` to the server's folds once cjls attaches.
+-- Formatting goes through the server too: conform.nvim falls back to LSP formatting
+-- when no external formatter is configured for the filetype (`kickstart.plugins.conform`).
+-- `:checkhealth cangjie` shows what it found.
+vim.pack.add { 'https://github.com/ide4cj/cangjie.nvim' }
