@@ -9,6 +9,8 @@ local function gh(repo) return 'https://github.com/' .. repo end
 vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
 -- Ensure basic parsers are installed
+-- NOTE: `cangjie` is not listed here on purpose: cangjie.nvim registers that grammar after
+-- init.lua has run, and the FileType autocommand below installs it on the first `.cj` buffer.
 local parsers = {
   'bash',
   'c',
@@ -54,7 +56,6 @@ local function treesitter_try_attach(buf, language)
   if has_indent_query then vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
 end
 
-local available_parsers = require('nvim-treesitter').get_available()
 vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     local buf, filetype = args.buf, args.match
@@ -63,6 +64,9 @@ vim.api.nvim_create_autocmd('FileType', {
     if not language then return end
 
     local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
+    -- Asked here, not once at startup: plugins loaded after init.lua (cangjie.nvim) can
+    -- register extra grammars, and `get_available()` re-reads the parser table every call.
+    local available_parsers = require('nvim-treesitter').get_available()
 
     if vim.tbl_contains(installed_parsers, language) then
       -- Enable the parser if it is already installed

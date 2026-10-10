@@ -11,7 +11,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "cangjie.nvim": {
-      "rev": "a6abe7c879eb99f94613089dc42768a19020057b",
+      "rev": "7cefecb8bfdfbb0e1203d69ef5d81b564add784c",
       "src": "https://github.com/ide4cj/cangjie.nvim"
     },
     "conform.nvim": {

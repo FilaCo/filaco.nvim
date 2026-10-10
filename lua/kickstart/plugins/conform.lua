@@ -9,6 +9,7 @@ require('conform').setup {
     local enabled_filetypes = {
       lua = true, -- stylua, with this repo's `.stylua.toml`
       rust = true, -- rustfmt, through rust-analyzer (the `lsp_format = 'fallback'` below)
+      cangjie = true, -- cjls formats; a file with syntax errors is left as it is
     }
     if enabled_filetypes[vim.bo[bufnr].filetype] then
       return { timeout_ms = 500 }
