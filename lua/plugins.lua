@@ -3,7 +3,7 @@
 -- Each module under `lua/kickstart/plugins/` installs one plugin (or one group of
 -- related plugins) with `vim.pack.add` and configures it. The order is the order
 -- the plugins are set up in: the colorscheme before anything that reads highlight
--- groups, mini.icons before Telescope that uses them.
+-- groups, mini.icons before Telescope and mini.files that use them.
 
 require 'kickstart.plugins.guess-indent'
 require 'kickstart.plugins.gitsigns'
@@ -25,8 +25,8 @@ require 'kickstart.plugins.treesitter'
 -- require 'kickstart.plugins.debug'
 -- require 'kickstart.plugins.indent_line'
 -- require 'kickstart.plugins.lint'
--- require 'kickstart.plugins.autopairs'
--- require 'kickstart.plugins.neo-tree'
+-- require 'kickstart.plugins.autopairs' -- mini.pairs does this already, see `kickstart.plugins.mini`
+-- require 'kickstart.plugins.neo-tree' -- mini.files does this already, see `kickstart.plugins.mini`
 
 -- NOTE: You can add your own plugins, configuration, etc. in `lua/custom/plugins/*.lua`.
 --

@@ -33,6 +33,23 @@ require('mini.ai').setup {
 -- - sr)'  - [S]urround [R]eplace [)] [']
 require('mini.surround').setup()
 
+-- Auto-insert the closing bracket/quote when typing the opening one.
+-- Comes with mini.nvim, so no extra plugin is needed (kickstart's optional
+-- `kickstart.plugins.autopairs` would pull in nvim-autopairs for the same job).
+require('mini.pairs').setup()
+
+-- File explorer that edits the file system like a buffer:
+-- rename a file by editing its line, delete with `dd`, create with `o`, then `=` to apply.
+-- Navigation: `l`/`h` go into/out of a directory, `<CR>` opens, `q` closes.
+-- See `:help MiniFiles-navigation` and `:help MiniFiles-manipulation`
+require('mini.files').setup()
+vim.keymap.set('n', '<leader>e', function()
+  -- Open at the current file when the buffer has a real file behind it, else at cwd
+  local path = vim.api.nvim_buf_get_name(0)
+  if vim.uv.fs_stat(path) == nil then path = nil end
+  MiniFiles.open(path)
+end, { desc = 'File [E]xplorer' })
+
 -- Simple and easy statusline.
 --  You could remove this setup call if you don't like it,
 --  and try some other statusline plugin
