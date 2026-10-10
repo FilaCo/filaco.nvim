@@ -63,14 +63,16 @@ require('blink.cmp').setup {
 
   snippets = { preset = 'luasnip' },
 
-  -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-  -- which automatically downloads a prebuilt binary when enabled.
-  --
-  -- By default, we use the Lua implementation instead, but you may enable
-  -- the rust implementation via `'prefer_rust_with_warning'`
+  -- The Rust fuzzy matcher is faster than the Lua one and forgives typos (`max_typos`),
+  -- ranks by frecency and by words near the cursor; the Lua one does none of that.
+  -- `setup()` downloads a prebuilt binary in the background and checks its sha256. The
+  -- version comes from the git tag vim.pack checked out (the `1.*` range above), so the
+  -- binary is re-downloaded after `vim.pack.update()` moves the tag. Completion starts once
+  -- the download is done (a few seconds, only on the first start after an install or
+  -- update); if it fails, blink warns and uses the Lua matcher instead.
   --
   -- See `:help blink-cmp-config-fuzzy` for more information
-  fuzzy = { implementation = 'lua' },
+  fuzzy = { implementation = 'prefer_rust_with_warning' },
 
   -- Shows a signature help window while you type arguments for a function
   signature = { enabled = true },
