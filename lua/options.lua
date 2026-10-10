@@ -8,7 +8,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+-- (iTerm2 here uses "JetBrainsMono Nerd Font Mono", so icons render fine)
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 --  See `:help vim.o`
@@ -17,9 +18,10 @@ vim.g.have_nerd_font = false
 
 -- Make line numbers default
 vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+-- Relative line numbers: the current line shows its absolute number, every
+-- other line shows its distance from the cursor, so `5j` / `12k` need no counting.
+-- Pairs well with the disabled arrow keys in `keymaps.lua`.
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -80,5 +82,10 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+-- Default border for every floating window (LSP hover, signature help, blink.cmp
+-- menus, mini.files...). Plugins that draw their own border (Telescope) are unaffected.
+-- See `:help 'winborder'`
+vim.o.winborder = 'rounded'
 
 -- vim: ts=2 sts=2 sw=2 et
