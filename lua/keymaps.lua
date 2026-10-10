@@ -39,7 +39,37 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- TIP: Disable arrow keys in normal mode
+-- [[ Lazygit in a floating terminal ]]
+-- No plugin needed: a scratch buffer, a floating window and a terminal job.
+--  See `:help nvim_open_win()` and `:help jobstart()` (the `term = true` option)
+vim.keymap.set('n', '<leader>gg', function()
+  if vim.fn.executable 'lazygit' ~= 1 then
+    vim.notify('lazygit is not installed', vim.log.levels.WARN)
+    return
+  end
+  -- `listed = false, scratch = true`: the buffer is hidden from `:ls` and never asks to be saved
+  local buf = vim.api.nvim_create_buf(false, true)
+  local width = math.floor(vim.o.columns * 0.9)
+  local height = math.floor(vim.o.lines * 0.9)
+  vim.api.nvim_open_win(buf, true, {
+    relative = 'editor',
+    width = width,
+    height = height,
+    col = math.floor((vim.o.columns - width) / 2),
+    row = math.floor((vim.o.lines - height) / 2),
+    style = 'minimal',
+  })
+  vim.fn.jobstart({ 'lazygit' }, {
+    term = true,
+    -- When lazygit exits, delete the buffer; that also closes the floating window.
+    on_exit = function()
+      vim.schedule(function() pcall(vim.api.nvim_buf_delete, buf, { force = true }) end)
+    end,
+  })
+  vim.cmd.startinsert()
+end, { desc = 'Lazy[G]it' })
+
+-- Disable arrow keys in normal mode: `hjkl` keep the hands on the home row
 vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
