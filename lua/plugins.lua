@@ -9,7 +9,7 @@
 require 'kickstart.plugins.guess-indent'
 require 'kickstart.plugins.gitsigns'
 require 'kickstart.plugins.which-key'
-require 'kickstart.plugins.tokyonight'
+require 'kickstart.plugins.colorscheme'
 require 'kickstart.plugins.mini'
 require 'kickstart.plugins.pick'
 require 'kickstart.plugins.hipatterns'
