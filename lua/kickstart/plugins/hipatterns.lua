@@ -6,7 +6,7 @@
 --  See `:help mini.hipatterns` and `:help MiniHipatterns-examples`
 
 -- Keywords per highlight group, the same keywords todo-comments highlights by default.
--- The `MiniHipatterns*` groups are styled by the colorscheme (tokyonight) or, without
+-- The `MiniHipatterns*` groups are styled by the colorscheme (mini.hues) or, without
 -- one, by mini.hipatterns itself. `:help MiniHipatterns-hl-groups`
 local keywords = {
   MiniHipatternsFixme = { 'FIX', 'FIXME', 'BUG', 'FIXIT', 'ISSUE' },
