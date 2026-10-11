@@ -84,7 +84,7 @@ vim.o.scrolloff = 10
 vim.o.confirm = true
 
 -- Default border for every floating window (LSP hover, signature help, blink.cmp
--- menus, mini.files...). Plugins that draw their own border (Telescope) are unaffected.
+-- menus, mini.files, mini.pick...).
 -- See `:help 'winborder'`
 vim.o.winborder = 'rounded'
 

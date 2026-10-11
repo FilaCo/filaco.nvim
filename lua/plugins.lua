@@ -3,7 +3,7 @@
 -- Each module under `lua/kickstart/plugins/` installs one plugin (or one group of
 -- related plugins) with `vim.pack.add` and configures it. The order is the order
 -- the plugins are set up in: the colorscheme before anything that reads highlight
--- groups, mini.icons before Telescope and mini.files that use them.
+-- groups, mini.nvim (its icons) before the picker and mini.files that use them.
 
 require 'kickstart.plugins.guess-indent'
 require 'kickstart.plugins.gitsigns'
@@ -11,7 +11,7 @@ require 'kickstart.plugins.which-key'
 require 'kickstart.plugins.tokyonight'
 require 'kickstart.plugins.todo-comments'
 require 'kickstart.plugins.mini'
-require 'kickstart.plugins.telescope'
+require 'kickstart.plugins.pick'
 require 'kickstart.plugins.lspconfig'
 require 'kickstart.plugins.conform'
 require 'kickstart.plugins.blink-cmp'
