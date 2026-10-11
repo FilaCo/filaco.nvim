@@ -123,19 +123,47 @@ local servers = {
         if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
       end
 
+      -- `workspace.library` lists extra directories whose Lua files lua_ls treats as read-only
+      -- definitions (types, globals, `require` targets). lua_ls loads *every* `.lua` file under
+      -- every library directory before it answers the first request, so this list decides how long
+      -- a cold start takes. Pulling in the whole 'runtimepath' (`nvim_get_runtime_file('', true)`)
+      -- meant ~17 MB of Lua from every plugin, their test suites included: tens of seconds of wait.
+      -- See https://github.com/neovim/nvim-lspconfig/issues/3189 and `:help lsp-config`.
+      --
+      -- $VIMRUNTIME alone gives all of `vim.*`: the API, `vim.fn`, options and `vim.uv` are typed in
+      -- `$VIMRUNTIME/lua/vim/_meta/` and `$VIMRUNTIME/lua/uv/_meta.lua` (see `:help lua-guide`,
+      -- `:help vim.uv`). That is why lua_ls's bundled `${3rd}/luv/library` is no longer needed.
+      local library = { vim.env.VIMRUNTIME }
+
+      -- Plugins whose API this config calls beyond `setup()`, so their types are worth the load time.
+      -- mini.nvim defines the `MiniFiles`/`MiniIcons` globals and the `mini.pick`/`mini.extra`
+      -- modules used in `kickstart/plugins/mini.lua` and `pick.lua`; without it lua_ls would warn
+      -- "Undefined global `MiniFiles`" and know nothing of the pickers. Add a name here when you start
+      -- calling into another plugin. The name is the plugin directory name, as in `:help vim.pack.get()`.
+      local typed_plugins = { 'mini.nvim' }
+      -- `info = false` skips the git queries `vim.pack.get()` would otherwise run for every plugin.
+      for _, plugin in ipairs(vim.pack.get(nil, { info = false })) do
+        if vim.tbl_contains(typed_plugins, plugin.spec.name) then table.insert(library, plugin.path) end
+      end
+      -- A library entry may also be a single file. nvim-lspconfig ships settings types for every
+      -- server it knows (~1 MB); this one file is the `lspconfig.settings.lua_ls` type used below.
+      vim.list_extend(library, vim.api.nvim_get_runtime_file('lua/lspconfig/types/lsp/lua_ls.lua', false))
+
       client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
         runtime = {
           version = 'LuaJIT',
+          -- Resolve `require('a.b')` the way Neovim does: `lua/a/b.lua` or `lua/a/b/init.lua` inside
+          -- the workspace or a library directory (`:help lua-module-load`). That is why the library
+          -- entries above are plugin roots, not their `lua/` subdirectories.
           path = { 'lua/?.lua', 'lua/?/init.lua' },
         },
         workspace = {
           checkThirdParty = false,
-          -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
-          --  See https://github.com/neovim/nvim-lspconfig/issues/3189
-          library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
-            '${3rd}/luv/library',
-            '${3rd}/busted/library',
-          }),
+          library = library,
+          -- Directories skipped in the workspace *and* in every library directory (gitignore-style
+          -- names). Plugin test suites are large (mini.nvim: 15 MB under `tests/`) and define nothing
+          -- this config uses. `.vscode` is lua_ls's own default, kept because this list replaces it.
+          ignoreDir = { '.vscode', 'tests', 'test', 'spec' },
         },
       })
     end,
