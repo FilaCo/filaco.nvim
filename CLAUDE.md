@@ -7,7 +7,7 @@ Neovim with it: every change is explained (what and why, with `:help` tags) and 
 
 - `init.lua` only requires, in order: `options` → `keymaps` → `pack` → `plugins`. The leader key is set in
   `lua/options.lua` and must stay before anything that maps keys.
-- `lua/pack.lua`: `PackChanged` build hooks (telescope-fzf-native, LuaSnip, nvim-treesitter).
+- `lua/pack.lua`: `PackChanged` build hooks (LuaSnip, nvim-treesitter).
 - `lua/plugins.lua`: requires `lua/kickstart/plugins/*.lua` one by one, in setup order (colorscheme before plugins
   that read highlights, mini.icons before its users), then `custom.plugins`.
 - `lua/kickstart/plugins/<name>.lua`: one plugin (or group) per file: `vim.pack.add { ... }`, then `setup()`.
