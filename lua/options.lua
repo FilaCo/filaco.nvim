@@ -20,7 +20,6 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 -- Relative line numbers: the current line shows its absolute number, every
 -- other line shows its distance from the cursor, so `5j` / `12k` need no counting.
--- Pairs well with the disabled arrow keys in `keymaps.lua`.
 vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
