@@ -1,4 +1,11 @@
-# kickstart.nvim
+# filaco.nvim
+
+Personal Neovim 0.12 configuration derived from kickstart-modular, using the built-in `vim.pack` plugin manager.
+See [AGENTS.md](AGENTS.md) for the project layout, development conventions, and validation commands.
+
+The upstream Kickstart guide is preserved below for reference; some details differ from this configuration.
+
+## Upstream kickstart.nvim guide
 
 ## Introduction
 
