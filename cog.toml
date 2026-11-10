@@ -1,0 +1,15 @@
+ignore_merge_commits = true
+ignore_fixup_commits = true
+
+# `cog bump --auto` on master: the version goes into the server, the tag triggers the release
+tag_prefix = "v"
+branch_whitelist = ["master"]
+pre_bump_hooks = []
+post_bump_hooks = ["git push", "git push origin v{{version}}"]
+
+[changelog]
+path = "CHANGELOG.md"
+template = "remote"
+remote = "github.com"
+owner = "FilaCo"
+repository = "filaco.nvim"
