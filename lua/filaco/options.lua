@@ -13,3 +13,9 @@ vim.o.splitbelow = true
 vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 4
+
+vim.o.laststatus = 3
+vim.o.splitkeep = 'screen'
+
+vim.o.termguicolors = true
+vim.o.background = 'dark'
