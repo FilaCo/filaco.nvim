@@ -44,7 +44,13 @@ vim.pack.add {
 }
 
 -- jb.nvim setup
-require('jb').setup()
+require('jb').setup {
+    snacks = {
+        explorer = {
+            enabled = true,
+        },
+    },
+}
 vim.cmd.colorscheme 'jb'
 
 -- mini.nvim setup
@@ -305,8 +311,47 @@ require('edgy').setup(edgy_opts)
 -- lualine.nvim setup
 require('lualine').setup {
     options = {
-        globalstatus = true,
         theme = 'jb',
+        globalstatus = true,
+        component_separators = '',
+        section_separators = '',
+    },
+    sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {
+            { 'nav_bar', padding = { left = 1, right = 0 } },
+            {
+                'filetype',
+                icon_only = true,
+                padding = { left = 0, right = 0 },
+            },
+            {
+                'filename',
+                path = 0,
+                padding = { left = 0, right = 1 },
+            },
+        },
+        lualine_x = {},
+        lualine_y = { 'branch', 'searchcount', 'location' },
+        lualine_z = {
+            {
+                'mode',
+                fmt = function(mode)
+                    local names = {
+                        NORMAL = 'NO',
+                        INSERT = 'IN',
+                        VISUAL = 'VI',
+                        ['V-LINE'] = 'VL',
+                        ['V-BLOCK'] = 'VB',
+                        REPLACE = 'RE',
+                        COMMAND = 'CL',
+                        TERMINAL = 'TE',
+                    }
+                    return names[mode] or mode
+                end,
+            },
+        },
     },
 }
 
