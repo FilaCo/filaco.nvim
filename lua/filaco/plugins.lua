@@ -37,11 +37,7 @@ vim.pack.add {
     'https://github.com/MunifTanjim/nui.nvim',
 
     -- Completion
-    'https://github.com/hrsh7th/nvim-cmp',
-    'https://github.com/hrsh7th/cmp-nvim-lsp',
-    'https://github.com/hrsh7th/cmp-buffer',
-    'https://github.com/hrsh7th/cmp-path',
-    'https://github.com/hrsh7th/cmp-cmdline',
+    'https://github.com/saghen/blink.cmp',
 
     'https://github.com/smjonas/inc-rename.nvim',
     'https://github.com/nickkadutskyi/jb.nvim',
@@ -160,78 +156,58 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- lazydev setup
 require('lazydev').setup {
+    integrations = { cmp = false },
     library = {
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
     },
 }
 
--- Completion setup
-local cmp = require 'cmp'
-
-cmp.setup {
-    preselect = cmp.PreselectMode.None,
-
-    snippet = {
-        expand = function(args) vim.snippet.expand(args.body) end,
+-- blink.cmp setup
+local blink = require 'blink.cmp'
+blink.setup {
+    keymap = {
+        preset = 'enter',
+        ['<C-y>'] = { 'select_and_accept' },
     },
 
-    mapping = cmp.mapping.preset.insert {
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.abort(),
-        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-
-        ['<CR>'] = cmp.mapping.confirm { select = false },
-
-        ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif vim.snippet.active { direction = 1 } then
-                vim.snippet.jump(1)
-            else
-                fallback()
-            end
-        end, { 'i', 's' }),
-
-        ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif vim.snippet.active { direction = -1 } then
-                vim.snippet.jump(-1)
-            else
-                fallback()
-            end
-        end, { 'i', 's' }),
+    completion = {
+        documentation = { auto_show = true, auto_show_delay_ms = 200 },
     },
 
-    sources = cmp.config.sources({ { name = 'lazydev' } }, {
-        { name = 'nvim_lsp' },
-        { name = 'path' },
-    }, {
-        { name = 'buffer' },
-    }),
-}
+    cmdline = {
+        enabled = true,
+        keymap = {
+            preset = 'cmdline',
+            ['<Right>'] = false,
+            ['<Left>'] = false,
+        },
+        completion = {
+            list = { selection = { preselect = false } },
+            menu = {
+                auto_show = function() return vim.fn.getcmdtype() == ':' end,
+            },
+            ghost_text = { enabled = true },
+        },
+    },
 
-cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
     sources = {
-        { name = 'buffer' },
+        default = { 'lazydev', 'lsp', 'path', 'buffer' },
+        providers = {
+            lazydev = {
+                name = 'LazyDev',
+                module = 'lazydev.integrations.blink',
+                score_offset = 100,
+            },
+        },
     },
-})
 
-cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-        { name = 'path' },
-    }, {
-        { name = 'cmdline' },
-    }),
-})
+    fuzzy = { implementation = 'prefer_rust' },
+}
 
 -- LSP setup
 require('mason').setup {}
 vim.lsp.config('*', {
-    capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    capabilities = blink.get_lsp_capabilities(),
 })
 require('mason-lspconfig').setup {
     ensure_installed = {
@@ -347,7 +323,6 @@ require('noice').setup {
         override = {
             ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
             ['vim.lsp.util.stylize_markdown'] = true,
-            ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
         },
     },
     presets = {
