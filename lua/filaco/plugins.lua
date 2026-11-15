@@ -40,7 +40,7 @@ vim.pack.add {
     'https://github.com/saghen/blink.cmp',
 
     'https://github.com/smjonas/inc-rename.nvim',
-    'https://github.com/nickkadutskyi/jb.nvim',
+    { src = 'https://github.com/FilaCo/jb.nvim', version = '8d545392f99b38d3324251fd80733725dc2250a1' },
 }
 
 -- jb.nvim setup
@@ -50,6 +50,7 @@ require('jb').setup {
             enabled = true,
         },
     },
+    terminal_colors = true,
 }
 vim.cmd.colorscheme 'jb'
 
