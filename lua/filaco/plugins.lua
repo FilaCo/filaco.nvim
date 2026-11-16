@@ -60,6 +60,7 @@ vim.pack.add {
     { src = 'https://github.com/FilaCo/jb.nvim', version = '8d545392f99b38d3324251fd80733725dc2250a1' },
     'https://github.com/esmuellert/codediff.nvim',
     'https://github.com/mrcjkb/rustaceanvim',
+    'https://github.com/saecki/crates.nvim',
 }
 
 -- jb.nvim setup
@@ -424,3 +425,6 @@ require('codediff').setup {
         conflict_result_position = 'center',
     },
 }
+
+-- crates.nvim setup
+require('crates').setup()
