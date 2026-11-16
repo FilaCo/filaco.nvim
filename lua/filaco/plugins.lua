@@ -11,6 +11,18 @@ vim.api.nvim_create_autocmd('PackChanged', {
     end,
 })
 
+vim.g.rustaceanvim = {
+    server = {
+        default_settings = {
+            ['rust-analyzer'] = {
+                check = {
+                    command = 'clippy',
+                },
+            },
+        },
+    },
+}
+
 vim.pack.add {
     'https://github.com/nvim-mini/mini.nvim',
     'https://github.com/folke/snacks.nvim',
@@ -41,6 +53,8 @@ vim.pack.add {
 
     'https://github.com/smjonas/inc-rename.nvim',
     { src = 'https://github.com/FilaCo/jb.nvim', version = '8d545392f99b38d3324251fd80733725dc2250a1' },
+    'https://github.com/esmuellert/codediff.nvim',
+    'https://github.com/mrcjkb/rustaceanvim',
 }
 
 -- jb.nvim setup
@@ -106,6 +120,7 @@ require('snacks').setup {
     picker = { layout = { preset = 'vscode' } },
     terminal = {},
     words = {},
+    zen = {},
 }
 
 -- nvim-treesitter setup
@@ -237,7 +252,6 @@ require('mason-lspconfig').setup {
         'nginx_language_server',
         'qmlls',
         'ruff',
-        'rust_analyzer',
         'stylua',
         'svelte',
         'taplo',
@@ -246,7 +260,9 @@ require('mason-lspconfig').setup {
         'vimls',
         'yamlls',
     },
-    automatic_enable = true,
+    automatic_enable = {
+        exclude = { 'rust_analyzer' },
+    },
 }
 
 -- conform.nvim setup
@@ -392,5 +408,13 @@ require('trouble').setup()
 require('nvim-treesitter-textobjects').setup {
     move = {
         set_jumps = true,
+    },
+}
+
+-- codediff setup
+require('codediff').setup {
+    diff = {
+        conflict_ours_position = 'left',
+        conflict_result_position = 'center',
     },
 }

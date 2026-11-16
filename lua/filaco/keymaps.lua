@@ -9,7 +9,9 @@ vim.keymap.set(
     { desc = 'Show buffer keymaps' }
 )
 
-vim.keymap.set('n', '<space>tt', function() Snacks.terminal.toggle() end, { desc = 'Toggle terminal' })
+vim.keymap.set('n', '<leader>tt', function() Snacks.terminal.toggle() end, { desc = 'Toggle terminal' })
+
+vim.keymap.set('n', '<leader>z', function() Snacks.zen.zen() end, { desc = 'Zen mode' })
 
 -- Files
 vim.keymap.set('n', '<leader>e', function() Snacks.explorer() end, { desc = 'Toggle explorer' })
@@ -80,51 +82,43 @@ vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(event)
         local buf = event.buf
 
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {
-            buffer = buf,
-            desc = 'Goto definition',
-        })
+        local function map_default(modes, lhs, rhs, desc, opts)
+            modes = type(modes) == 'table' and modes or { modes }
 
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, {
-            buffer = buf,
-            desc = 'Goto declaration',
-        })
+            for _, mode in ipairs(modes) do
+                local existing = vim.api.nvim_buf_call(buf, function() return vim.fn.maparg(lhs, mode, false, true) end)
 
-        vim.keymap.set('n', 'gr', function() Snacks.picker.lsp_references() end, {
-            buffer = buf,
-            desc = 'Find references',
-        })
+                if existing.buffer ~= 1 then
+                    vim.keymap.set(
+                        mode,
+                        lhs,
+                        rhs,
+                        vim.tbl_extend('force', opts or {}, {
+                            buffer = buf,
+                            desc = desc,
+                        })
+                    )
+                end
+            end
+        end
 
-        vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, {
-            buffer = buf,
-            desc = 'Goto implementation',
-        })
-
-        vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, {
-            buffer = buf,
-            desc = 'Goto type definition',
-        })
-
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, {
-            buffer = buf,
-            desc = 'Hover documentation',
-        })
-
-        vim.keymap.set('n', 'gK', vim.lsp.buf.signature_help, {
-            buffer = buf,
-            desc = 'Signature help',
-        })
-
-        vim.keymap.set({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, {
-            buffer = buf,
-            desc = 'Code action',
-        })
-
-        vim.keymap.set('n', '<leader>cr', function() return ':IncRename ' .. vim.fn.expand '<cword>' end, {
-            buffer = buf,
-            expr = true,
-            desc = 'Rename symbol',
-        })
+        map_default('n', 'gd', vim.lsp.buf.definition, 'Goto definition')
+        map_default('n', 'gD', vim.lsp.buf.declaration, 'Goto declaration')
+        map_default('n', 'gr', function() Snacks.picker.lsp_references() end, 'Find references')
+        map_default('n', 'gI', vim.lsp.buf.implementation, 'Goto implementation')
+        map_default('n', 'gy', vim.lsp.buf.type_definition, 'Goto type definition')
+        map_default('n', 'K', vim.lsp.buf.hover, 'Hover documentation')
+        map_default('n', 'gK', vim.lsp.buf.signature_help, 'Signature help')
+        map_default({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, 'Code action')
+        map_default(
+            'n',
+            '<leader>cr',
+            function() return ':IncRename ' .. vim.fn.expand '<cword>' end,
+            'Rename symbol',
+            {
+                expr = true,
+            }
+        )
     end,
 })
 

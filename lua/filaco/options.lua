@@ -19,3 +19,11 @@ vim.o.splitkeep = 'screen'
 
 vim.o.termguicolors = true
 vim.o.background = 'dark'
+
+vim.o.undofile = true
+
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.o.foldlevel = 99
+
+vim.opt.fillchars:append { eob = ' ' }
