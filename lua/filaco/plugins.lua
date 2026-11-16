@@ -18,6 +18,11 @@ vim.g.rustaceanvim = {
                 check = {
                     command = 'clippy',
                 },
+                cargo = {
+                    allFeatures = true,
+                    buildScripts = { enable = true },
+                },
+                procMacro = { enable = true },
             },
         },
     },
@@ -381,11 +386,12 @@ require('gitsigns').setup()
 -- noice.nvim setup
 require('noice').setup {
     lsp = {
-        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        -- override markdown rendering so that plugins use **Treesitter**
         override = {
             ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
             ['vim.lsp.util.stylize_markdown'] = true,
         },
+        progress = { enabled = false },
     },
     presets = {
         command_palette = true,
