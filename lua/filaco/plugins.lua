@@ -90,21 +90,27 @@ mini_ai.setup {
     },
 }
 
-require('mini.align').setup {}
-require('mini.comment').setup {}
+require('mini.align').setup()
+require('mini.comment').setup()
 
 local map_multistep = require('mini.keymap').map_multistep
 
 map_multistep('i', '<CR>', { 'minipairs_cr' })
 map_multistep('i', '<BS>', { 'minipairs_bs' })
 
-require('mini.move').setup {}
+require('mini.move').setup()
 require('mini.operators').setup {
     replace = { prefix = 'cr' },
 }
-require('mini.pairs').setup {}
-require('mini.splitjoin').setup {}
-require('mini.surround').setup {}
+require('mini.pairs').setup()
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'rust',
+    callback = function() MiniPairs.unmap('i', "'", "''") end,
+})
+
+require('mini.splitjoin').setup()
+require('mini.surround').setup()
 
 -- snacks.nvim setup
 ---@type snacks.Config
@@ -233,7 +239,7 @@ blink.setup {
 }
 
 -- LSP setup
-require('mason').setup {}
+require('mason').setup()
 vim.lsp.config('*', {
     capabilities = blink.get_lsp_capabilities(),
 })
