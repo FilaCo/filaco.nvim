@@ -148,6 +148,7 @@ require('nvim-treesitter').install {
     'diff',
     'dockerfile',
     'doxygen',
+    'ebnf',
     'fish',
     'git_config',
     'git_rebase',
